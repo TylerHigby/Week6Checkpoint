@@ -31,7 +31,7 @@ class PostsService {
     logger.log(url)
     const res = await api.get(url)
     logger.log(res.data)
-    AppState.posts = res.data.results.map(post => new post(post))
+    AppState.posts = res.data.results.map(post => new Post(post))
     AppState.pageNumber = res.data.page
     AppState.totalPages = res.data.totalPages
   }
@@ -43,6 +43,13 @@ class PostsService {
     AppState.pageNumber = res.data.page
     AppState.totalPages = res.data.totalPages
     AppState.search = searchTerm
+  }
+
+  async deletePost(id) {
+    logger.log('deleting', id)
+    const res = await api.delete('api/posts/' + id)
+    logger.log(res.data)
+
   }
 
 }

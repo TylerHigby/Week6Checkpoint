@@ -32,13 +32,13 @@ export default {
       getCommercials();
     });
     const route = useRoute();
-    async function getPostsByProfileId() {
-      try {
-        await postsService.getPostsByProfileId(route.params.profileId);
-      } catch (error) {
-        Pop.error(error)
-      }
-    }
+    // async function getPostsByProfileId() {
+    //   try {
+    //     await postsService.getPostsByProfileId(route.params.profileId);
+    //   } catch (error) {
+    //     Pop.error(error)
+    //   }
+    // }
     async function getProfileById() {
       try {
         await profilesService.getProfileById(route.params.profileId)
@@ -56,7 +56,7 @@ export default {
     return {
       posts: computed(() => AppState.posts),
       profile: computed(() => AppState.activeProfile),
-      account: computed(() => AppState.account),
+      // account: computed(() => AppState.account),
       coverImg: computed(() => `url(${AppState.activeProfile?.coverImg})`),
       commercials: computed(() => AppState.commercials)
     };
