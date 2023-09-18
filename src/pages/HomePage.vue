@@ -1,19 +1,72 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 bg-white rounded elevation-3">
-      <img src="https://bcw.blob.core.windows.net/public/img/8600856373152463" alt="CodeWorks Logo"
-        class="rounded-circle">
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
-    </div>
+  <div class="container-fluid bg-black">
+    <section class="row">
+      <div v-for="commercial in commercials" :key="commercial.id" class="col-6">
+        <!-- {{ commercial.title }} -->
+        <CommercialCard :commercial="commercial" />
+      </div>
+      <div>
+        <SearchBar />
+      </div>
+      <div>
+        <PostForm />
+      </div>
+      <div v-for="post in posts" :key="post.id" class="col-12">
+        <!-- {{ post.body }}i -->
+        <PostCard :post="post" />
+      </div>
+    </section>
+    <section class="row justify-content-around m-2">
+      <button @click="changePage(pageNumber - 1)" :disabled="pageNumber <= 1"
+        class="col-2 btn btn-primary mb-3">previous</button>
+      <button @click="changePage(pageNumber + 1)" class="col-2 btn btn-primary mb-3">next</button>
+    </section>
   </div>
 </template>
 
 <script>
+import { computed, onMounted } from "vue";
+import Pop from "../utils/Pop.js";
+import { postsService } from "../services/PostsService.js";
+import { AppState } from '../AppState.js'
+import { commercialsService } from "../services/CommercialsService.js";
 export default {
   setup() {
-    return {}
+    onMounted(() => {
+      getPosts();
+      getCommercials();
+    });
+
+    async function getPosts() {
+      try {
+        await postsService.getPosts();
+      } catch (error) {
+        Pop.error(error)
+      }
+    }
+
+    async function getCommercials() {
+      try {
+        await commercialsService.getCommercials();
+      } catch (error) {
+        Pop.error(error)
+      }
+    }
+
+    return {
+      posts: computed(() => AppState.posts),
+      commercials: computed(() => AppState.commercials),
+      pageNumber: computed(() => AppState.pageNumber),
+      totalPages: computed(() => AppState.totalPages),
+      searchTerm: computed(() => AppState.searchTerm),
+      async changePage(number) {
+        try {
+          await postsService.changePage(`api/posts?page=${number}`)
+        } catch (error) {
+          Pop.error(error)
+        }
+      }
+    }
   }
 }
 </script>
