@@ -17,9 +17,10 @@
     <div class="mt-2">
       posted on: {{ post.createdAt }}
     </div>
-    <div class="text-end">
+    <!-- when logged in, clicking this heart should send the correct id to the api with a post request. Check the readme for exact endpoint details. For references, this should work a lot like a delete request, but makes a post request to the api instead, and don't get rid of the post afterwards. -->
+    <button @click="likePost(post.id)" class="text-center col-12 btn btn-primary">
       {{ post.likes }}<i class="text-danger mdi mdi-heart"></i>
-    </div>
+    </button>
 
   </div>
 </template>
@@ -38,6 +39,14 @@ export default {
     const router = useRoute();
     return {
       account: computed(() => AppState.account),
+      async likePost(id) {
+        try {
+          await postsService.likePost(id)
+          Pop.success('Liked Post')
+        } catch (error) {
+          Pop.error(error)
+        }
+      },
       async deletePost(id) {
         try {
           if (await Pop.confirm('Are you sure you want to delete the post?')) {

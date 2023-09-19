@@ -1,5 +1,6 @@
 import { AppState } from "../AppState.js"
 import { Post } from "../models/Post.js"
+import { router } from "../router.js"
 import { logger } from "../utils/Logger.js"
 import { api } from "./AxiosService.js"
 
@@ -24,32 +25,40 @@ class PostsService {
     AppState.posts = []
     const res = await api.get(`api/posts?creatorId=${profileId}`)
     logger.log(res.data)
-    AppState.posts = res.data.map(post => new Post(post))
+    AppState.posts = res.data.posts.map(post => new Post(post))
   }
 
   async changePage(url) {
     logger.log(url)
     const res = await api.get(url)
-    logger.log(res.data)
-    AppState.posts = res.data.results.map(post => new Post(post))
+    logger.log('change page 📃', res.data)//good
+    AppState.posts = res.data.posts.map(post => new Post(post))
     AppState.pageNumber = res.data.page
     AppState.totalPages = res.data.totalPages
   }
 
+
   async searchPosts(searchTerm) {
-    const res = await api.get(`search/posts?query=${searchTerm}`)
-    logger.log(res.data)
-    AppState.posts = res.data.results.map(post => new Post(post))
+    const res = await api.get(`api/posts?query=${searchTerm}`)
+    logger.log('searching', res.data)
+    AppState.posts = res.data.posts.map(post => new Post(post))
     AppState.pageNumber = res.data.page
     AppState.totalPages = res.data.totalPages
-    AppState.search = searchTerm
+    AppState.searchTerm = searchTerm
   }
 
   async deletePost(id) {
     logger.log('deleting', id)
     const res = await api.delete('api/posts/' + id)
     logger.log(res.data)
+  }
 
+  async likePost(id) {
+    logger.log('liking', id)
+    // const res = await api.post('api/posts/' + id)
+    // logger.log('liking', res.data)
+    const res = await api.post(`api/posts/${id}/like`)
+    logger.log('liking', res.data)
   }
 
 }

@@ -1,10 +1,13 @@
 <template>
-  <form @submit="searchPosts" class="row mt-2 mb-2">
+  <form @submit.prevent="searchPosts" class="row mt-2 mb-2">
     <div class="col-12 input-group">
-      <input type="text" class="form-control" placeholder="search">
+      <input v-model="searchTerm" type="text" class="form-control" placeholder="search">
       <button class="btn btn-primary"><i class="mdi mdi-magnify"></i></button>
     </div>
   </form>
+  <div v-if="activeSearch" class="text-white">
+    listing results for: {{ activeSearch }}
+  </div>
 </template>
 
 <script>
@@ -21,9 +24,10 @@ export default {
     return {
       searchTerm,
       activeSearch: computed(() => AppState.searchTerm),
+      //the page is reloading when this is submitted. Cannot trust any of the code on the inside right now. Take this step by step, logging and verifying the values of searchTerm.value and your service along the way.
       async searchPosts() {
         try {
-          logger.log('searching', searchTerm.value)
+          logger.log('searching', searchTerm.value) // g
           await postsService.searchPosts(searchTerm.value)
         } catch (error) {
           Pop.error(error)

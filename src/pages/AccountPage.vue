@@ -10,6 +10,7 @@
         <p>{{ account.email }}</p>
       </div>
       <div class="col-12 bg-black">
+        <!--  include all the details of the account here, everything should be editable, check the readme and model in it for all those fields -->
         <h3 class="text-center">Edit Profile</h3>
         <form @submit.prevent="editProfile" class="row">
           <div class="mb-2 col-12">
@@ -20,9 +21,21 @@
           </div>
           <div class="mb-2 col-12">
             <label for="">
+              Email:
+            </label>
+            <input v-model="editable.email" class="form-control" type="text">
+          </div>
+          <div class="mb-2 col-12">
+            <label for="">
               Profile picture:
             </label>
             <input v-model="editable.picture" class="form-control" type="text">
+          </div>
+          <div class="mb-2 col-12">
+            <label for="">
+              Cover Image:
+            </label>
+            <input v-model="editable.coverImg" class="form-control" type="text">
           </div>
           <div class="mb-2 col-12">
             <label for="">
@@ -32,9 +45,33 @@
           </div>
           <div class="mb-2 col-12">
             <label for="">
+              Linkedin link:
+            </label>
+            <input v-model="editable.linkedin" class="form-control" type="text">
+          </div>
+          <div class="mb-2 col-12">
+            <label for="">
               Bio:
             </label>
             <textarea v-model="editable.bio" rows="8" class="form-control mb-2"></textarea>
+          </div>
+          <div class="mb-2 col-12">
+            <label for="">
+              Resume:
+            </label>
+            <textarea v-model="editable.resume" rows="8" class="form-control mb-2"></textarea>
+          </div>
+          <div class="mb-2 col-12">
+            <label for="">
+              Class:
+            </label>
+            <textarea v-model="editable.class" class="form-control mb-2"></textarea>
+          </div>
+          <div class="mb-2 col-12">
+            <label for="">
+              Graduated?:
+            </label>
+            <input v-model="editable.graduated" class="form-control" type="text">
           </div>
           <button class="btn btn-success">Update Account Info </button>
         </form>
